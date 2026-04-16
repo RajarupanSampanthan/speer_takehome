@@ -7,3 +7,4 @@ edition = "2024"
 tokio = { version = "1.52.0", features = ["full"] }
 dns_types = { path = "../dns_types" }
 dns_dto = {path = "../dns_dto"}
+chrono = "0.4.44"

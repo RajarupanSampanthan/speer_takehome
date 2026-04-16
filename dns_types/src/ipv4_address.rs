@@ -3,7 +3,7 @@ use std::str::FromStr;
 use serde::{Serialize, Serializer};
 use serde_with::DeserializeFromStr;
 
-#[derive(DeserializeFromStr, Debug, Clone, PartialEq)]
+#[derive(DeserializeFromStr, Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Copy)]
 pub struct IpV4Address {
     byte_rep: u32,
 }
@@ -37,7 +37,7 @@ impl Serialize for IpV4Address {
         let s = (0..4)
             .map(|index| ((self.byte_rep) >> (8 * index)) & 255)
             .map(|x| x.to_string())
-            .reduce(|acc, e| format!("{}.{}", acc, e))
+            .reduce(|acc, e| format!("{}.{}", e, acc))
             .unwrap();
 
         serializer.serialize_str(&s)
@@ -46,7 +46,9 @@ impl Serialize for IpV4Address {
 
 mod tests {
 
-    use super::*;
+    use std::str::FromStr;
+
+    use super::IpV4Address;
 
     #[test]
     fn test_deserialize() {
@@ -55,6 +57,7 @@ mod tests {
         let generated = IpV4Address::from_str("0.0.1.1").unwrap();
 
         assert_eq!(expected, generated);
+        assert_eq!(serde_json::to_string(&generated).unwrap(), "\"0.0.1.1\"");
     }
 
     #[test]
@@ -74,6 +77,8 @@ mod tests {
         let result = IpV4Address::from_str("0.0.0.0");
         assert!(result.is_ok());
         let result = IpV4Address::from_str("0.0.0.0.0");
+        assert!(result.is_err());
+        let result = IpV4Address::from_str("0.0.0");
         assert!(result.is_err());
     }
 }

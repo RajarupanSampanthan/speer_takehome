@@ -1,35 +1,11 @@
-//! Run with
-//!
-//! ```not_rust
-//! cargo run -p example-hello-world
-//! ```
+use std::sync::Arc;
 
-use std::sync::{Arc, Mutex};
-
-use axum::{
-    Json, Router,
-    extract::{Path, Query, State},
-    response::Html,
-    routing::{get, post},
-};
-
-use axum_macros::debug_handler;
+use axum::{Router, routing::{get, post}};
 use dns_app::app_state::{AppState, SharedAppState};
+use dns_server::{add_dns_record_handler::add_dns_record_handler, list_dns_records_for_hostname_handler::list_dns_records_for_host_name_handler, resolve_hostname_handler::resolve_hostname_handler};
 use tokio::sync::RwLock;
 
-use crate::{
-    add_dns_record_handler::add_dns_record_handler,
-    delete_dns_record_handler::delete_dns_record_handler,
-    list_dns_records_for_hostname_handler::list_dns_records_for_host_name_handler,
-    path_parameters::HostnamePathParam, resolve_hostname_handler::resolve_hostname_handler,
-};
 
-mod add_dns_record_handler;
-mod delete_dns_record_handler;
-mod dns_error;
-mod list_dns_records_for_hostname_handler;
-mod path_parameters;
-mod resolve_hostname_handler;
 
 #[tokio::main]
 async fn main() {
@@ -40,7 +16,7 @@ async fn main() {
         .route("/api/dns", post(add_dns_record_handler))
         .route(
             "/api/dns/{hostname}",
-            get(resolve_hostname_handler).delete(delete_dns_record_handler),
+            get(resolve_hostname_handler).delete(add_dns_record_handler),
         )
         .route(
             "/api/dns/{hostname}/records",

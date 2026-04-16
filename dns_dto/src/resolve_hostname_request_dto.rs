@@ -16,7 +16,7 @@ pub enum PointingRecordDto {
 pub struct ResolveHostnameRequestDto {
     pub hostname: Hostname,
 
-    #[serde(rename = "CNAME")]
+    #[serde(rename = "resolvedIps")]
     pub resolved_ips: Vec<IpV4Address>,
 
     #[serde(flatten)]

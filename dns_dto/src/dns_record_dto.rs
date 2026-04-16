@@ -1,9 +1,7 @@
-use std::time::{SystemTime, SystemTimeError};
-
 use dns_types::{hostname::Hostname, ipv4_address::IpV4Address};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 #[serde(tag = "type", content = "value")]
 pub enum DnsRecordDto {
     #[serde(rename = "A")]
