@@ -1,0 +1,9 @@
+[package]
+name = "dns_app"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { version = "1.52.0", features = ["full"] }
+dns_types = { path = "../dns_types" }
+dns_dto = {path = "../dns_dto"}

@@ -1,0 +1,7 @@
+[workspace]
+
+members = ["dns_app", "dns_dto","dns_types",
+    "dns_server"
+]
+
+resolver = "3"
